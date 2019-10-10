@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "main.h"
 #include "catch.hpp"
-
+// https://github.com/catchorg/Catch2/tree/master/docs
 SCENARIO("Delete spaces tests") {
 	GIVEN("Any expression") {
 		std::string test_str;
@@ -96,7 +96,7 @@ SCENARIO("Evaluating parser") {
 				REQUIRE(ParseArithmeticEspression(test_str) == 18);
 			}
 			test_str = "3000+3000+3000";
-			THEN("Simplified expression") {
+			THEN("Evaluated expression") {
 				REQUIRE(ParseArithmeticEspression(test_str) == 9000);
 			}
 		}
@@ -106,7 +106,7 @@ SCENARIO("Evaluating parser") {
 				REQUIRE(ParseArithmeticEspression(test_str) == -18);
 			}
 			test_str = "-500-500-500";
-			THEN("Simplified expression") {
+			THEN("Evaluated expression") {
 				REQUIRE(ParseArithmeticEspression(test_str) == -1500);
 			}
 		}
@@ -116,7 +116,7 @@ SCENARIO("Evaluating parser") {
 				REQUIRE(ParseArithmeticEspression(test_str) == 160);
 			}
 			test_str = "3*3*3*3*3*2";
-			THEN("Simplified expression") {
+			THEN("Evaluated expression") {
 				REQUIRE(ParseArithmeticEspression(test_str) == 486);
 			}
 		}
@@ -126,11 +126,11 @@ SCENARIO("Evaluating parser") {
 				REQUIRE(ParseArithmeticEspression(test_str) == 60);
 			}
 			test_str = "256/2/2/2/2/2/2/2/2";
-			THEN("Simplified expression") {
+			THEN("Evaluated expression") {
 				REQUIRE(ParseArithmeticEspression(test_str) == 1);
 			}
 			test_str = "1/2";
-			THEN("Simplified expression") {
+			THEN("Evaluated expression") {
 				REQUIRE(ParseArithmeticEspression(test_str) == 0);
 			}
 		}
@@ -140,12 +140,12 @@ SCENARIO("Evaluating parser") {
 				REQUIRE(ParseArithmeticEspression(test_str) == 245496);
 			}
 			test_str = "521*2112/1/1/1/1/1/1/2/1/1/1*-1*222";
-			THEN("Simplified expression") {
+			THEN("Evaluated expression") {
 				REQUIRE(ParseArithmeticEspression(test_str) == -122139072);
 			}
 			test_str =
 				"123+3123+123+123+3123--123123--123123--132123*123*213/3/2-100000";
-			THEN("Simplified expression") {
+			THEN("Evaluated expression") {
 				REQUIRE(ParseArithmeticEspression(test_str) == 284984);
 			}
 		}
@@ -159,10 +159,7 @@ SCENARIO("Handling exception parser") {
 			THEN("Handled exception") {
 				REQUIRE_THROWS(ParseArithmeticEspression(test_str));
 			}
-			test_str = "3000+3000+3000";
-			THEN("Simplified expression") {
-				REQUIRE(ParseArithmeticEspression(test_str) == 9000);
-			}
+
 		}
 	}
 }
