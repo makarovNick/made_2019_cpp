@@ -15,5 +15,5 @@ test.o : test.cpp catch.hpp main.h
 	$(CC) -c test.cpp
 
 clean:
-	rm -f *.o Calculator tests 
+	rm -f *.o Calculator test 
 
