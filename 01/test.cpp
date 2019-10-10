@@ -151,7 +151,7 @@ SCENARIO("Evaluating parser") {
 		}
 	}
 }
-SCENARIO("Handling exception parser") {
+SCENARIO("Handling exception tests") {
 	GIVEN("Wrong expression") {
 		std::string test_str;
 		WHEN("Division by zero") {
