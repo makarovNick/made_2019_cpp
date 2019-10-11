@@ -142,7 +142,7 @@ SCENARIO("Evaluating parser") {
 				REQUIRE(ParseArithmeticEspression(test_str) == -122139072);
 			}
 			test_str =
-				"123+3123+123+123+3123--123123--123123--132123*213/3-100000";
+				"123+3123+123+123+3123+123123+123123+132123*213/3-100000";
 			THEN("Evaluated expression") {
 				REQUIRE(ParseArithmeticEspression(test_str) == 9533594);
 			}
