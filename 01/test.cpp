@@ -133,18 +133,18 @@ SCENARIO("Evaluating parser") {
 			}
 		}
 		WHEN("Composite expression") {
-			test_str = "123123*233/123+4-1212*-1+3------12312/2 + 4";
+			test_str = "123123*233/123+4-1212*-1+3------12312/2+4";
 			THEN("Evaluated expression") {
-				REQUIRE(ParseArithmeticEspression(test_str) == 245496);
+				REQUIRE(ParseArithmeticEspression(test_str) == 240612);
 			}
 			test_str = "521*2112/1/1/1/1/1/1/2/1/1/1*-1*222";
 			THEN("Evaluated expression") {
 				REQUIRE(ParseArithmeticEspression(test_str) == -122139072);
 			}
 			test_str =
-				"123+3123+123+123+3123--123123--123123--132123*123*213/3/2-100000";
+				"123+3123+123+123+3123--123123--123123--132123*213/3-100000";
 			THEN("Evaluated expression") {
-				REQUIRE(ParseArithmeticEspression(test_str) == 284984);
+				REQUIRE(ParseArithmeticEspression(test_str) == 9533594);
 			}
 		}
 	}
