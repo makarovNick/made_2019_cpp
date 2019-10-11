@@ -23,13 +23,11 @@ SCENARIO("Delete spaces tests") {
 		}
 		WHEN("Tabs appearence") {
 			test_str =
-				"17		+ 4 - 3		* 2		-4444 *		9	"
-				"	/3";
+				"17		+ 4 - 3		* 2		-4444 *		9		/3";
 			DeleteSpaces(test_str);
 			THEN("Spaces removed") { REQUIRE(test_str == "17+4-3*2-4444*9/3"); }
 			test_str =
-				"	7 -9		*2	/2	*	-	2	"
-				"*11/123";
+				"	7 -9		*2	/2	*	-	2	*11/123";
 			DeleteSpaces(test_str);
 			THEN("Spaces removed") { REQUIRE(test_str == "7-9*2/2*-2*11/123"); }
 		}
