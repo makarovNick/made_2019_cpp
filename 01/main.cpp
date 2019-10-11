@@ -1,3 +1,4 @@
+#include <iostream>
 #include "main.h"
 int main(int argc, char** argv) {
 	if (argc <= 1) {
@@ -17,7 +18,7 @@ int main(int argc, char** argv) {
 		std::cout << ParseArithmeticEspression(str) << std::endl;
 	}
 	catch (std::exception& e) {
-		std::cerr << "ERROR : " << "Exception handled during runtime ( "<< e.what()<<" )" << std::endl;
+		std::cerr << "ERROR : " << "Exception handled during runtime ( " << e.what() << " )" << std::endl;
 		return -3;
 	}
 	return 0;
