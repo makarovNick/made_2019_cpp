@@ -78,10 +78,7 @@ int ParseArithmeticEspression(const std::string & str) {
 		case '+':
 			return std::stoi(numA) + ParseArithmeticEspression(str.substr(i + 1));
 		case '-':
-			temp = GetNextInteger(str.substr(i + 1));
-			return std::stoi(numA) - temp +
-				ParseArithmeticEspression(
-					str.substr(i + std::to_string(temp).length() + 1));
+			return std::stoi(numA) - ParseArithmeticEspression(str.substr(i + 1));
 		case '*':
 			temp = GetNextInteger(str.substr(i + 1));
 			numA = std::to_string(std::stoi(numA) * temp);
