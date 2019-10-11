@@ -69,19 +69,21 @@ int GetNextInteger(const std::string& str) {
 	return std::stoi(temp);
 }
 // Evaluate given arithmetic expression
-int ParseArithmeticEspression(const std::string & str) {
-	std::string numA = "0";
+int ParseArithmeticEspression(const std::string & str, std::string StartNum = "0") {
+
 	int temp;
 	size_t len = str.length();
 	for (size_t i = 0; i < len; i++) {
 		switch (str[i]) {
 		case '+':
-			return std::stoi(numA) + ParseArithmeticEspression(str.substr(i + 1));
+			return std::stoi(StartNum) + ParseArithmeticEspression(str.substr(i + 1));
 		case '-':
-			return std::stoi(numA) - ParseArithmeticEspression(str.substr(i + 1));
+			temp = -GetNextInteger(str.substr(i+1));
+			return std::stoi(StartNum) + ParseArithmeticEspression(str.substr(i +std::to_string(temp).length()),
+									       std::to_string(temp));
 		case '*':
 			temp = GetNextInteger(str.substr(i + 1));
-			numA = std::to_string(std::stoi(numA) * temp);
+			StartNum = std::to_string(std::stoi(StartNum) * temp);
 			i += std::to_string(temp).length();
 			break;
 		case '/':
@@ -89,12 +91,13 @@ int ParseArithmeticEspression(const std::string & str) {
 			if (temp == 0)
 				throw(std::logic_error("ERROR : Division by zero "));
 			else
-				numA = std::to_string(std::stoi(numA) / temp);
+				StartNum = std::to_string(std::stoi(StartNum) / temp);
 			i += std::to_string(temp).length();
 			break;
 		default:
-			numA += str[i];
+			StartNum += str[i];
 		}
 	}
-	return std::stoi(numA);
+	return std::stoi(StartNum);
 }
+
