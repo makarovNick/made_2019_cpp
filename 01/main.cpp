@@ -1,5 +1,7 @@
-#include <iostream>
 #include "main.h"
+
+#include <iostream>
+
 int main(int argc, char** argv) {
 	if (argc <= 1) {
 		std::cerr << "Usage : " << argv[0] << " '5 + 5'" << std::endl;
