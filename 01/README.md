@@ -12,5 +12,4 @@ example@ubuntu:~/example$ ./Calculator "------------------------8"
 8
 example@ubuntu:~/example$ ./Calculator "12*3*12 * 222*3/4 - 12 - -1000"
 72916
-example@ubuntu:~/example$ 
 ```
