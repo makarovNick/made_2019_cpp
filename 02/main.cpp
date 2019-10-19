@@ -46,6 +46,8 @@ int main()
 
 	std::cout << "    linear allocator result: " << duration << " us" << std::endl << std::endl;
 
+	
+	
 	std::cout << "==========================================================================" << std::endl;
 	std::cout << "    1 char array length of 1000000 " << std::endl << std::endl;
 
@@ -61,7 +63,6 @@ int main()
 	start = Clock::now();
 
 	LinearAllocator allocator2(sizeof(char)* 1000000);
-
 	char* array1 = (char*)allocator2.alloc(sizeof(char) * 1000000);
 	allocator2.reset();
 
@@ -70,6 +71,8 @@ int main()
 
 	std::cout << "    linear allocator result: " << duration << " us" << std::endl << std::endl;
 
+	
+	
 	std::cout << "==========================================================================" << std::endl;
 	std::cout << "    1000 arrays of composite structures length of 1000" <<std::endl<< std::endl;
 
