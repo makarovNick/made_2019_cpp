@@ -6,6 +6,9 @@
 using Clock=std::chrono::high_resolution_clock; 
 using microseconds=std::chrono::microseconds;
 
+//time comparison of simple linear allocator with std::malloc()
+//on different types of memoty allocation
+
 struct testStruct {
 	int a;
 	char b[100];
