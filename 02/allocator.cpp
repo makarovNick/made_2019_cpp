@@ -11,6 +11,11 @@ LinearAllocator::LinearAllocator(size_t maxSize)
 	size = maxSize;
 	basePointer = (byte*) malloc(maxSize * sizeof(byte));
 }
+LinearAllocator::~LinearAllocator()
+{
+		free(basePointer);
+		basePointer = nullptr;
+}
 byte* LinearAllocator::alloc(size_t _size)
 {
 	offset += _size;
