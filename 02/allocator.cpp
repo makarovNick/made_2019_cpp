@@ -1,10 +1,10 @@
 #include "allocator.h"
 
 #include <new>
-#define MAX_CHUNK_SIZE 4294967294
+//const size_t MAX_CHUNK_SIZE = 4294967294
 LinearAllocator::LinearAllocator(size_t maxSize)
 {
-	if(maxSize > MAX_CHUNK_SIZE || maxSize == 0)
+	if(/*maxSize > MAX_CHUNK_SIZE || */ maxSize == 0)
 		throw std::range_error("Initial size of allocator is larger than allowed or 0");
 	
 	offset = 0;
