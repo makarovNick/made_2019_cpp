@@ -11,10 +11,7 @@ private:
 	size_t offset;
 	size_t size;
 public:
-	~LinearAllocator() {
-		free(basePointer);
-		basePointer = nullptr;
-	}
+	~LinearAllocator();
 	LinearAllocator(size_t maxSize);
 	byte* alloc(size_t size);
 	void reset();
