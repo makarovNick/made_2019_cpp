@@ -21,4 +21,4 @@ test.o : test.cpp catch.hpp parser.h
 	$(CC) -c test.cpp
 
 clean : 
-	rm -f *.o *.a example 
+	rm -f *.o *.a example test
