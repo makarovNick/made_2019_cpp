@@ -16,9 +16,9 @@ SCENARIO("Initializaion tests") {
 		}
 		WHEN("size is not ok") {
 			LinearAllocator* alloc2;
-			THEN("size is too large") {
-				REQUIRE_THROWS(alloc2 = new LinearAllocator(4294967295));
-			}
+			//THEN("size is too large") {
+			//	REQUIRE_THROWS(alloc2 = new LinearAllocator(4294967295));
+			//}
 			THEN("0 size") {
 				REQUIRE_THROWS(alloc2 = new LinearAllocator(0));
 			}
