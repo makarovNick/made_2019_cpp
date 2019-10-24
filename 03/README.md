@@ -13,9 +13,24 @@
 Функционал реализован классом     ``` parser() ``` который имеет 6 конструкторов, принимающих пользовательские колбэк-функции:
 ```
 parser() : функции не вызываются
-parser(StartFunc, EndFunc) : Вызываются функции в начале парсинга(принимает строку для парсинга) и в конце(принимает вектора токенов)
-parser(StartFunc, onStrToken, onNumToken, EndFunc) : onNumToken вызывается при каждом получении числового токена(принимает токен), аналогично для строки onStrToken
+parser(StartFunc, EndFunc) : Вызываются функции в начале парсинга(принимает строку для парсинга) 
+и в конце(принимает вектора токенов)
+parser(StartFunc, onStrToken, onNumToken, EndFunc) : onNumToken вызывается при каждом получении 
+числового токена(принимает токен), аналогично для строки onStrToken
 parser(onStrToken, onNumToken) : Работает аналогично, но без начальной и конечной функций
 parser(onStrToken) : callback только для строковых токенов
 parser(onNumToken) : только для числовых
+```
+Также после инициализации можно изменять функции с помощью сеттеров : 
+```
+setStartFunction(startFunc start)
+setEndFunction(endFunc end)
+setOnStrFunction(strToken str)
+setOnNumFunction(numToken num)
+```
+Парсинг осуществляется методом класса ```parser.parseString(const std::string&)```
+Результат сохраняется в вектора соответственно
+```
+vector<string> str_tokens
+vector<uint64_t> num_tokens
 ```
