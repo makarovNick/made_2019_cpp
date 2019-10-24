@@ -103,6 +103,7 @@ void parser::parseString(const std::string& str)
 			}
 		}
 	}
+        //Checks for last token
 	if (!currentToken.empty())
 	{
 		if (isNum)
