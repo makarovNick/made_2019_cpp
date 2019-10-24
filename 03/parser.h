@@ -40,7 +40,7 @@ public:
 	
 	~parser();
 
-	void parseString(const std::string& newMail);
+	void parseString(const std::string& str);
 	std::vector<uint64_t> getNumTokens()const;
 	std::vector<std::string> getStrTokens()const;
 
