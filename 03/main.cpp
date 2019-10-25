@@ -33,9 +33,8 @@ void funcE(std::vector<std::string>& st, std::vector<uint64_t>& nt)
 }
 int main()
 {
-	parser *pr = new parser(funcS, funcNum, funcStr, funcE);
-	pr->parseString("hello 123 h02 0001 12312z adsasdadsa hiiiiiiiiiiiiiiiiiiiiiiiiii hi 99999999999");
-	delete pr;
+	parser pr(funcS, funcNum, funcStr, funcE);
+	pr.parseString("hello 123 h02 0001 12312z adsasdadsa hiiiiiiiiiiiiiiiiiiiiiiiiii hi 99999999999");
 	return 0;
 }
 

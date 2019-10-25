@@ -1,64 +1,43 @@
 #include "parser.h"
 
-parser::parser(startFunc start, numToken onNumCallback, strToken onStrCallback, endFunc end) :
+parser::parser(const startFunc & start, const numToken& onNumCallback, const strToken& onStrCallback, const endFunc& end) :
 	onRun(start),
 	onEnd(end),
 	strTok(onStrCallback),
 	numTok(onNumCallback)
-{}
-parser::parser(numToken onNumCallback, strToken onStrCallback) :
-	onRun(nullptr),
-	onEnd(nullptr),
-	strTok(onStrCallback),
-	numTok(onNumCallback)
-{}
-parser::parser(startFunc start, endFunc end) :
-	onRun(start),
-	onEnd(end),
-	strTok(nullptr),
-	numTok(nullptr)
-{}
-parser::parser(numToken onNumCallback) :
-	onRun(nullptr),
-	onEnd(nullptr),
-	strTok(nullptr),
-	numTok(onNumCallback)
-{}
-parser::parser(strToken onStrCallback) :
-	onRun(nullptr),
-	onEnd(nullptr),
-	strTok(onStrCallback),
-	numTok(nullptr)
-{}
-parser::parser() :
-	onRun(nullptr),
-	onEnd(nullptr),
-	strTok(nullptr),
-	numTok(nullptr)
-{}
-
-parser::~parser()
 {
-	num_tokens.clear();
-	str_tokens.clear();
-	startFunc onRun = nullptr;
-	endFunc onEnd = nullptr;
-	strToken strTok = nullptr;
-	numToken numTok = nullptr;
 }
-void parser::setStartFunction(startFunc start)
+parser::parser(const numToken& onNumCallback, const strToken& onStrCallback) :
+	strTok(onStrCallback),
+	numTok(onNumCallback)
+{
+}
+parser::parser(const startFunc& start, const endFunc& end) :
+	onRun(start),
+	onEnd(end)
+{
+}
+parser::parser(const numToken& onNumCallback) :
+	numTok(onNumCallback)
+{
+}
+parser::parser(const strToken& onStrCallback) :
+	strTok(onStrCallback)
+{
+}
+void parser::setStartFunction(const startFunc& start)
 {
 	onRun = start;
 }
-void parser::setEndFunction(endFunc end)
+void parser::setEndFunction(const endFunc& end)
 {
 	onEnd = end;
 }
-void parser::setOnStrFunction(strToken str)
+void parser::setOnStrFunction(const strToken& str)
 {
 	strTok = str;
 }
-void parser::setOnNumFunction(numToken num)
+void parser::setOnNumFunction(const numToken& num)
 {
 	numTok = num;
 }

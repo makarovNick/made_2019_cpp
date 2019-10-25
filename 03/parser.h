@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <functional>
 
 //class contains two vectors of tokens :
 //str_tokens and num_tokens
@@ -14,38 +15,37 @@
 // tokens from string if any
 class parser
 {
-	using startFunc = void (*)(const std::string& str);
-	using strToken = void (*)(const std::string& token);
-	using numToken = void (*)(const uint64_t& token);
-	using endFunc = void (*)(std::vector<std::string>& st, std::vector<uint64_t>& nt);
+	using startFunc = std::function<void(const std::string& str)> ;
+	using endFunc = std::function<void(std::vector<std::string>& st, std::vector<uint64_t>& nt)>;
+	using strToken = std::function<void(const std::string& token)>;
+	using numToken = std::function<void(const uint64_t& token)>;
 
 private:
 
-	startFunc onRun;
-	endFunc onEnd;
-	strToken strTok;
-	numToken numTok;
+	startFunc onRun = nullptr;
+	endFunc onEnd = nullptr;
+	strToken strTok = nullptr;
+	numToken numTok = nullptr;
 
 	std::vector<std::string> str_tokens;
 	std::vector<uint64_t> num_tokens;
 
 public:
 
-	parser(startFunc start, numToken onNumCallback, strToken onStrCallback, endFunc end);
-	parser(numToken onNumCallback, strToken onStrCallback);
-	parser(startFunc start, endFunc end);
-	parser(numToken onNumCallback);
-	parser(strToken onStrCallback);
-	parser();
-	
-	~parser();
+	parser(const startFunc& start, const numToken& onNumCallback, const strToken& onStrCallback, const endFunc& end);
+	parser(const numToken& onNumCallback, const strToken& onStrCallback);
+	parser(const startFunc& start, const endFunc& end);
+	parser(const numToken& onNumCallback);
+	parser(const strToken& onStrCallback);
+	parser() = default;
+	~parser() = default;
 
 	void parseString(const std::string& str);
 	std::vector<uint64_t> getNumTokens()const;
 	std::vector<std::string> getStrTokens()const;
 
-	void setStartFunction(startFunc start);
-	void setEndFunction(endFunc end);
-	void setOnStrFunction(strToken str);
-	void setOnNumFunction(numToken num);
+	void setStartFunction(const startFunc& start);
+	void setEndFunction(const endFunc& end);
+	void setOnStrFunction(const strToken& str);
+	void setOnNumFunction(const numToken& num);
 };
