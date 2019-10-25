@@ -49,6 +49,7 @@ void parser::parseString(const std::string& str)
 		onRun(str);
 	std::string currentToken;
 	bool isNum = true;
+	uint64_t temp;
 	for (auto& c : str)
 	{
 		// skips spaces, fill temp string
@@ -67,7 +68,7 @@ void parser::parseString(const std::string& str)
 			{
 				if (isNum)
 				{
-					uint64_t temp = std::stoull(currentToken);
+					temp = std::stoull(currentToken);
 					if (numTok != nullptr)
 						numTok(temp);
 					num_tokens.push_back(temp);
@@ -88,9 +89,10 @@ void parser::parseString(const std::string& str)
 	{
 		if (isNum)
 		{
-			if (numTok != nullptr)
-				numTok(std::stoull(currentToken));
-			num_tokens.push_back(std::stoull(currentToken));
+				temp = std::stoull(currentToken);
+				if (numTok != nullptr)
+					numTok(temp);
+				num_tokens.push_back(temp);;
 		}
 		else
 		{
