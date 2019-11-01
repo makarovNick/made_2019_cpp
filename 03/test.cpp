@@ -3,11 +3,15 @@
 #include "catch.hpp"
 #include "parser.h"
 
-SCENARIO("Constructor tests") {
-	GIVEN("Some constructor") {
-		WHEN("Correct constructor") {
+SCENARIO("Constructor tests")
+{
+	GIVEN("Some constructor") 
+	{
+		WHEN("Correct constructor")
+		{
 			parser* pr;
-			THEN("OK") {
+			THEN("OK") 
+			{
 				REQUIRE_NOTHROW( pr = new parser());
 				delete pr;
 			}
@@ -16,24 +20,28 @@ SCENARIO("Constructor tests") {
 				REQUIRE_NOTHROW( pr = new parser(func));
                                 delete pr;
 			}
-			THEN("OK"){
+			THEN("OK")
+			{
                                 auto func = [](const uint64_t& num) {};
                                 REQUIRE_NOTHROW( pr = new parser(func));
 				delete pr;
 			}
-                        THEN("OK"){
+                        THEN("OK")
+			{
 				auto func1 = [](const uint64_t& num) {};
                                 auto func = [](const std::string& str) {};
                                 REQUIRE_NOTHROW( pr = new parser(func1, func));
                                 delete pr;
                         }
-                        THEN("OK"){
+                        THEN("OK")
+			{
                                 auto func1 = [](std::vector<std::string>& st, std::vector<uint64_t>& nt) {};
                                 auto func = [](const std::string& str) {};
                                 REQUIRE_NOTHROW( pr = new parser(func, func1));
                                 delete pr;
 			}
-                        THEN("OK"){
+                        THEN("OK")
+			{
                                 auto func1 = [](std::vector<std::string>& st, std::vector<uint64_t>& nt) {};
                                 auto func2 = [](const uint64_t& n) {};
                                 auto func4 = [](const std::string& str) {};
@@ -45,31 +53,40 @@ SCENARIO("Constructor tests") {
 	}
 }
 
-SCENARIO("Setters tests") {
-        GIVEN("Some functions") {
-                WHEN("Correct setters") {
+SCENARIO("Setters tests") 
+{
+        GIVEN("Some functions") 
+	{
+                WHEN("Correct setters") 
+		{
 			auto func1 = [](std::vector<std::string>& st, std::vector<uint64_t>& nt) {};
 			auto func2 = [](const uint64_t& n) {};
 			auto func4 = [](const std::string& str) {};
 			parser * pr = new parser();
-			THEN("OK"){
+			THEN("OK")
+			{
 				REQUIRE_NOTHROW( pr->setStartFunction(func4));
 			}
-                        THEN("OK"){
+                        THEN("OK")
+			{
                                 REQUIRE_NOTHROW( pr->setEndFunction(func1));
                         }
-                        THEN("OK"){
+                        THEN("OK")
+			{
                                 REQUIRE_NOTHROW( pr->setOnStrFunction(func4));
                         }
-                        THEN("OK"){
+                        THEN("OK")
+			{
                                 REQUIRE_NOTHROW( pr->setOnNumFunction(func2));
                         }
 		}
 	}
 }
 
-SCENARIO("Parsing tests") {
-        GIVEN("Some string") {
+SCENARIO("Parsing tests") 
+{
+        GIVEN("Some string") 
+	{
                 WHEN("String tokens") 
 		{
 			parser *pr = new parser();
