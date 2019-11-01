@@ -1,6 +1,5 @@
 ﻿#include "Matrix.h"
 
-#include <iostream>
 #include <cassert>
 
 int main() {
