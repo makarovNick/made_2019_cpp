@@ -14,5 +14,8 @@ Deserializer.o : Deserializer.cpp Deserializer.h
 Serializer.o : Serializer.cpp Serializer.h
 	$(CC) -c Serializer.cpp
 
+test.o : test.cpp Deserializer.cpp Deserializer.h
+        $(CC) -c test.cpp
+
 clean : 
 	rm -f *.o example test
