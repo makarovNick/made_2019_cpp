@@ -62,7 +62,7 @@ private:
 				}
 			}
 
-			value = strtoull(token.c_str());
+			value = strtoull(token.c_str(), 0, 0);
 		}
 		else
 		{
