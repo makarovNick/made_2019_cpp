@@ -1,5 +1,4 @@
 #include "BigInt.h"
-#include "BigInt.h"
 
 BigInt::BigInt()
 	: digits(new char[20]) //int64_t max length is 20 chars
