@@ -29,18 +29,11 @@ BigInt& BigInt::operator=(const BigInt& copied)
 		return *this;
 	}
 
-	if (!digits)
+	if (_capacity < copied._capacity)
 	{
+		delete[] digits;
+		_capacity = copied._capacity;
 		digits = new char[_capacity];
-	}
-	else
-	{
-		if (_capacity < copied._capacity)
-		{
-			delete[] digits;
-			_capacity = copied._capacity;
-			digits = new char[_capacity];
-		}
 	}
 
 	_size = copied._size;
@@ -50,32 +43,25 @@ BigInt& BigInt::operator=(const BigInt& copied)
 }
 
 BigInt::BigInt(BigInt&& moved) noexcept
-	: digits(std::move(moved.digits))
+	: digits(moved.digits)
 	, _size(moved._size)
 	, _capacity(moved._capacity)
 {
 	moved.digits = nullptr;
-	moved._size = 0;
-	moved._capacity = 0;
 }
 
 BigInt& BigInt::operator=(BigInt&& moved) noexcept
 {
-	if (!digits)
+	if(digits!=nullptr)
 	{
-		digits = new char[_capacity];
+		delete[] digits;
 	}
-	else 
-	{
-		if (_capacity < moved._capacity)
-		{
-			delete[] digits;
-			_capacity = moved._capacity;
-			digits = new char[_capacity];
-		}
-	}
+
+	digits = moved.digits;
 	_size = moved._size;
-	std::copy(moved.digits, moved.digits + moved._size, digits);
+	_capacity = moved._capacity;
+	
+	moved.digits = nullptr;
 	
 	return *this;
 }
