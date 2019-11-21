@@ -33,7 +33,7 @@ std::string format(const std::string& str, Args&&... args)
         {
             if(c == '}') 
             {
-                throw std::invalid_argument("ERROR : '{' bracket  is missing");
+                throw std::runtime_error("ERROR : '{' bracket  is missing");
             }
 
             formatted += c;
@@ -45,7 +45,7 @@ std::string format(const std::string& str, Args&&... args)
             is >> arg_index;
             if(arg_index > arguments.size() - 1 || !is.good() )
             {
-                throw std::invalid_argument("ERROR : wrong argument");
+                throw std::runtime_error("ERROR : wrong argument");
             } 
 
             formatted += arguments[arg_index];
@@ -53,7 +53,7 @@ std::string format(const std::string& str, Args&&... args)
             is >> c;
             if(c != '}')
             {
-                throw std::invalid_argument("ERROR : '}' bracket  is missing");
+                throw std::runtime_error("ERROR : '}' bracket  is missing");
             } 
         }
     }
