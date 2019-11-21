@@ -6,10 +6,10 @@
 #include <stdexcept>
 
 template <typename T>
-std::string to_str(T&& content) 
+std::string to_str(T&& obj) 
 {
     std::ostringstream os;
-    os << std::forward<T>(content);
+    os << std::forward<T>(obj);
 
     return os.str();
 }
@@ -40,15 +40,15 @@ std::string format(const std::string& str, Args&&... args)
         }
         else 
         {
-            size_t arg_pos;
-            
-            is >> arg_pos;
-            if(arg_pos > arguments.size() - 1 || !is.good() )
+            size_t arg_index;
+
+            is >> arg_index;
+            if(arg_index > arguments.size() - 1 || !is.good() )
             {
                 throw std::invalid_argument("ERROR : wrong argument");
             } 
 
-            formatted += arguments[arg_pos];
+            formatted += arguments[arg_index];
 
             is >> c;
             if(c != '}')
