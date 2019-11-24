@@ -18,40 +18,43 @@ template <typename... Args>
 std::string format(const std::string& str, Args&&... args) 
 {
     std::vector<std::string> arguments = {to_str(std::forward<Args>(args))...};
-    //arguments.emplacels_back(to_str(std::forward<Args>(args))...);
-
-    std::istringstream is(str);
-    //not to skip space sybmols
-    is >> std::noskipws;
 
     std::string formatted;
 
-    char c;
-    while(is >> c) 
+    for(size_t i = 0; i < str.size(); ++i)
     {
-        if(c != '{') 
+        if(str[i] != '{') 
         {
-            if(c == '}') 
+            if(str[i] == '}') 
             {
                 throw std::runtime_error("ERROR : '{' bracket  is missing");
             }
 
-            formatted += c;
+            formatted += str[i];
         }
         else 
         {
-            size_t arg_index;
+            std::string tmp;
 
-            is >> arg_index;
-            if(arg_index > arguments.size() - 1 || !is.good() )
+            while(str[++i] != '}' && i < str.size())
+            {
+                if(!isdigit(str[i]))
+                {
+                    throw std::runtime_error("ERROR : wrong argument");
+                }
+
+                tmp +=str[i];
+            }
+
+            size_t arg_index = stoi(tmp);
+            if(arg_index > arguments.size() - 1)
             {
                 throw std::runtime_error("ERROR : wrong argument");
             } 
 
             formatted += arguments[arg_index];
 
-            is >> c;
-            if(c != '}')
+            if(str[i] != '}')
             {
                 throw std::runtime_error("ERROR : '}' bracket  is missing");
             } 
