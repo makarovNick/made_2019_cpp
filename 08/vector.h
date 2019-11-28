@@ -191,7 +191,7 @@ public:
 			__reallocate(capacity_ * 2);
 		}
 
-		data_[size_] = std::forward<value_type>(__x);
+		data_[size_] = std::move(__x);
 		size_++;
 	}
 
