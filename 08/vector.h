@@ -147,7 +147,7 @@ public:
 		}
 		return data_[__index];
 	}
-
+	
 	iterator begin()
 	{
 		return iterator(data_);
@@ -197,7 +197,6 @@ public:
 
 	void pop_back()
 	{
-		alloc_.destroy(data_ + size_ - 1);
 		size_--;
 
 		if (size_ * 4 <= capacity_)
