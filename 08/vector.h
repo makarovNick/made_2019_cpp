@@ -11,7 +11,6 @@ template <class T, class Allocator = Allocator<T>>
 class vector
 {
 public:
-
     using value_type = T;
     using size_type = size_t;
     using reference = value_type&;
@@ -19,7 +18,6 @@ public:
     using pointer = value_type*;
     using iterator = Iterator<value_type>;
     using reverse_iterator = std::reverse_iterator<iterator>;
-
 
     ~vector()
     {
@@ -51,8 +49,6 @@ public:
         while (capacity_ <<= 1, capacity_ < __size);
 
         data_ = alloc_.allocate(capacity_);
-
-
         for(size_type i = 0 ; i < size_; i++)
         {
             alloc_.construct(data_ + i, defolt);
@@ -134,6 +130,7 @@ public:
         {
             throw std::out_of_range("ERROR : vector out of bounds");
         }
+	    
         return data_[__index];
     }
 
@@ -203,7 +200,7 @@ public:
         }
     }
 	 
-	void clear()
+    void clear()
     {
         for(size_type i = 0 ; i < size_; i++)
         {
@@ -213,7 +210,7 @@ public:
         size_ = 0;
     }
 
-	bool empty() const
+    bool empty() const
     {
         return size_ == 0;
     }
