@@ -1,28 +1,30 @@
 #pragma once
 
 #include "Iterator.h"
+#include "Allocator.h"
 
 #include <stdexcept>
-#include <memory>
 #include <algorithm>
 
 
-template <class T, class Allocator = std::allocator<T>>
+template <class T, class Allocator = Allocator<T>>
 class vector
 {
 public:
+
     using value_type = T;
     using size_type = size_t;
     using reference = value_type&;
     using const_reference = const reference;
     using pointer = value_type*;
-    using const_pointer = const pointer;
     using iterator = Iterator<value_type>;
     using reverse_iterator = std::reverse_iterator<iterator>;
 
 
     ~vector()
     {
+        clear();
+
         alloc_.deallocate(data_, capacity_);
         data_ = nullptr;
     }
@@ -37,8 +39,7 @@ public:
         : size_(__size)
         , capacity_(8)
     {
-        while (capacity_ <<= 1, capacity_ < __size)
-            ;
+        while (capacity_ <<= 1, capacity_ < __size);
 
         data_ = alloc_.allocate(capacity_);
     }
@@ -47,66 +48,49 @@ public:
         : size_(__size)
         , capacity_(8)
     {
-        while (capacity_ <<= 1, capacity_ < __size)
-            ;
+        while (capacity_ <<= 1, capacity_ < __size);
 
         data_ = alloc_.allocate(capacity_);
-        std::fill(data_, data_ + size_, defolt);
+
+
+        for(size_type i = 0 ; i < size_; i++)
+        {
+            alloc_.construct(data_ + i, defolt);
+        }
     }
 
     vector(size_type __size, value_type&& defolt)
         : size_(__size)
         , capacity_(8)
     {
-        while (capacity_ <<= 1, capacity_ < __size)
-            ;
+        while (capacity_ <<= 1, capacity_ < __size);
 
         data_ = alloc_.allocate(capacity_);
-        std::fill(data_, data_ + size_, std::forward<value_type>(defolt));
+
+        for(size_type i = 0 ; i < size_; i++)
+        {
+            alloc_.construct(data_ + i, std::forward<value_type>(defolt));
+        }
     }
-
-    // vector(std::initializer_list<T> list)
-    // 	:	size_(list.size())
-    // 	,	capacity_(8)
-
-    // {
-    // 	while (capacity_ <<= 1, capacity_ < size_);
-
-    // 	data_ = alloc_.allocate(capacity_);
-    // 	std::copy(data_, data_ + size_, list.begin());
-    // }
-
-    // vector& operator =(std::initializer_list<T> list)
-    // {
-    // 	if(capacity_ < list.size())
-    // 	{
-    // 		alloc_.deallocate(data_, size_);
-    // 	}
-
-    // 	size_ = list.size();
-
-    // 	capacity_ = 8;
-    // 	while (capacity_ <<= 1, capacity_ < size_);
-
-    // 	data_ = alloc_.allocate(capacity_);
-    // 	std::copy(data_, data_ + size_, list.begin());
-
-    // 	return *this;
-    // }
 
     vector(const vector& other)
         : size_(other.size_)
         , capacity_(other.capacity_)
     {
         data_ = alloc_.allocate(capacity_);
-        std::copy(data_, data_ + size_, other.data_);
+
+        for(size_type i = 0 ; i < size_; i++)
+        {
+            alloc_.construct(data_ + i, other.data_[i]);
+        }
     }
 
     vector& operator=(vector&& moved)
     {
-        if (capacity_ < moved.size_)
+        if(data_)
         {
-            alloc_.deallocate(data_, size_);
+            clear();
+            alloc_.deallocate(data_, capacity_);
         }
 
         size_ = moved.size_;
@@ -120,16 +104,19 @@ public:
 
     vector& operator=(const vector& other)
     {
-        if (capacity_ < other.size_)
+        if(data_)
         {
-            alloc_.deallocate(data_, size_);
+            clear();
+            alloc_.deallocate(data_, capacity_);
         }
 
         size_ = other.size_;
         capacity_ = other.capacity_;
         data_ = alloc_.allocate(capacity_);
-
-        std::copy(data_, data_ + size_, other.data_);
+        for(size_type i = 0 ; i < size_; i++)
+        {
+            alloc_.construct(data_ + i, other.data_[i]);
+        }
         return *this;
     }
 
@@ -157,13 +144,13 @@ public:
             __reallocate(capacity_ * 2);
         }
 
-        data_[size_] = __x;
+        alloc_.construct(data_+size_, __x);
         size_++;
     }
 
     void push_back(value_type&& __x)
     {
-        emplace_back(std::move(__x));
+        emplace_back(std::forward<value_type>(__x));
     }
 
     void emplace_back(value_type&& __x)
@@ -173,18 +160,20 @@ public:
             __reallocate(capacity_ * 2);
         }
 
-        data_[size_] = std::move(__x);
+        alloc_.construct(data_+size_, std::forward<value_type>(__x));
         size_++;
     }
 
     void pop_back()
     {
+        alloc_.destroy(data_+size_);
         size_--;
 
         if (size_ * 4 <= capacity_)
         {
             __reallocate(capacity_ / 4);
         }
+
     }
 
     void resize(size_type __new_size)
@@ -193,9 +182,10 @@ public:
         {
             size_type temp = std::max(__new_size, capacity_);
             pointer new_data_ = alloc_.allocate(temp);
-            for (size_type i = 0; i < __new_size; ++i)
+            for (size_type i = 0; i < size_; ++i)
             {
-                new_data_[i] = (i >= size_ ? value_type() : data_[i]);
+                alloc_.construct(new_data_ + i, data_[i]);
+                alloc_.destroy(data_ + i);
             }
             alloc_.deallocate(data_, capacity_);
 
@@ -215,7 +205,12 @@ public:
 	 
 	void clear()
     {
-        std::fill(data_, data_ + size_, T());
+        for(size_type i = 0 ; i < size_; i++)
+        {
+            alloc_.destroy(data_+i);
+        }
+
+        size_ = 0;
     }
 
 	bool empty() const
@@ -258,11 +253,12 @@ private:
     {
         size_type temp = 1;
         while (temp <<= 1, temp < __new_size || temp < 8)
-            ;
+        ;
         pointer new_data_ = alloc_.allocate(temp);
         for (size_type i = 0; i < size_; i++)
         {
-            new_data_[i] = data_[i];
+            alloc_.construct(new_data_ + i , data_[i]);
+            alloc_.destroy(data_ + i);
         }
         alloc_.deallocate(data_, capacity_);
 
@@ -274,5 +270,5 @@ private:
     Allocator alloc_;
     size_type capacity_;
     size_type size_;
-    pointer data_;
+    pointer data_ = nullptr;
 };

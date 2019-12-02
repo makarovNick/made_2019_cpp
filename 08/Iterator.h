@@ -12,6 +12,7 @@ public:
     using size_type = size_t;
 
     Iterator() = default;
+    ~Iterator() = default;
     Iterator(Iterator&&) = default;
     Iterator(const Iterator&) = default;
 
