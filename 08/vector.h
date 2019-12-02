@@ -249,8 +249,8 @@ private:
     void __reallocate(size_type __new_size)
     {
         size_type temp = 1;
-        while (temp <<= 1, temp < __new_size || temp < 8)
-        ;
+        while (temp <<= 1, temp < __new_size || temp < 8);
+	    
         pointer new_data_ = alloc_.allocate(temp);
         for (size_type i = 0; i < size_; i++)
         {
