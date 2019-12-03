@@ -65,7 +65,7 @@ public:
 
         for(size_type i = 0 ; i < size_; i++)
         {
-            alloc_.construct(data_ + i, std::forward<value_type>(defolt));
+            alloc_.construct(data_ + i, std::move(defolt));
         }
     }
 
@@ -147,7 +147,7 @@ public:
 
     void push_back(value_type&& __x)
     {
-        emplace_back(std::forward<value_type>(__x));
+        emplace_back(std::move(__x));
     }
 
     void emplace_back(value_type&& __x)
