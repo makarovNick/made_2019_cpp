@@ -22,15 +22,14 @@ int main()
     auto hihihi = [](){for (size_t i = 0; i < 20; i++)std::cout<<"HI"<<std::endl;};
     auto generate = [](const char*a,int){return;};
 
-    A a;
+    //A a;
     // auto z = pool.exec(kek,1,2);
     // z.get();
     // z = pool.exec(hihihi);
     // z.get();s
     // z = pool.exec(generate, "yeeeeah", 1); 
     // z.get();
-    auto b = pool.exec(hi);
-    b.get();
-
+    auto a = pool.exec([](){return 2;});
+    std::cout<< a.get();
     return 0;
 }

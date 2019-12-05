@@ -7,8 +7,6 @@
 
 class ThreadPool
 {
-    using task = std::function<void()>;
-
 public:
     ThreadPool& operator=(const ThreadPool&) = delete;
     ThreadPool& operator=(ThreadPool&&) = delete;
@@ -17,15 +15,15 @@ public:
 
     explicit ThreadPool(size_t __size)
         : size_(__size)
-        , alive(true)
+        , is_alive(true)
     {
         for (size_t i = 0; i < __size; i++)
         {
-            threads.emplace_back([this]()
+            threads.emplace_back([&]()
             {
                 std::unique_lock<std::mutex> lock(mutex_);
 
-                while(alive)
+                while(is_alive)
                 {
                     if(!tasks.empty())
                     {
@@ -47,12 +45,12 @@ public:
 
     ~ThreadPool()
     {
-        alive = false;
+        is_alive = false;
 
         is_any_tasks.notify_all();
-        for (size_t i = 0; i < size_; i++)
+        for (auto& thread : threads)
         {
-            threads[i].join();
+            thread.join();
         }        
     }
 
@@ -63,7 +61,7 @@ public:
         (
             std::bind(func, args...)
         );
-
+        
         {
             std::lock_guard<std::mutex> lock(mutex_);
             tasks.emplace([task]()
@@ -77,12 +75,17 @@ public:
         return task->get_future();
     }
 
+    size_t size() const
+    {
+        return size_;
+    }
+
 private:
     std::vector<std::thread> threads;
-    std::queue<task> tasks;
+    std::queue<std::function<void()>> tasks;
 
     std::condition_variable is_any_tasks;
-    std::atomic_bool alive;
+    std::atomic_bool is_alive;
     std::mutex mutex_;
 
     size_t size_;

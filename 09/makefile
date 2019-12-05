@@ -6,8 +6,14 @@ all : run
 run : main.o ThreadPool.h
 	$(CC) $(FLAGS) -o example main.o
 
+test : test.o ThreadPool.h catch.hpp
+	$(CC) $(FLAGS) -o test test.cpp
+
 main.o : main.cpp
 	$(CC) -c main.cpp
+
+test.o : test.cpp
+	$(CC) -c test.cpp
 
 clean : 
 	rm -f *.o example test
