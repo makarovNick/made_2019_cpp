@@ -52,10 +52,7 @@ public:
 
     ~ThreadPool()
     {
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            is_alive = false;
-        }
+        is_alive = false;
 
         is_any_tasks.notify_all();
         for (auto& thread : threads)
