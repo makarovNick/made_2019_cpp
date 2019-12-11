@@ -4,6 +4,7 @@
 #include <queue>
 #include <functional>
 #include <thread>
+#include <iostream>
 
 class ThreadPool
 {
@@ -19,20 +20,26 @@ public:
     {
         for (size_t i = 0; i < __size; i++)
         {
-            threads.emplace_back([&]()
+            threads.emplace_back([this]()
             {
-                std::unique_lock<std::mutex> lock(mutex_);
-
                 while(is_alive)
                 {
+                    std::unique_lock<std::mutex> lock(mutex_);
+
                     if(!tasks.empty())
                     {
                         auto current_task = tasks.front();
                         tasks.pop();
-
+                        
                         lock.unlock();
-
-                        current_task();
+                        try
+                        {
+                            current_task();
+                        }
+                        catch(const std::exception& e)
+                        {
+                            std::cerr << e.what() << std::endl;
+                        }
                     }
                     else
                     {
@@ -45,7 +52,10 @@ public:
 
     ~ThreadPool()
     {
-        is_alive = false;
+        {
+            std::lock_guard<std::mutex> lock(mutex_);
+            is_alive = false;
+        }
 
         is_any_tasks.notify_all();
         for (auto& thread : threads)
@@ -59,11 +69,12 @@ public:
     {
         auto task = std::make_shared<std::packaged_task<decltype(func(args...))()>>
         (
-            std::bind(func, args...)
+            std::bind((func),(args)...)
         );
         
         {
             std::lock_guard<std::mutex> lock(mutex_);
+
             tasks.emplace([task]()
             {
                 (*task)();
