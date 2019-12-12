@@ -6,7 +6,7 @@ all : run
 run : main.o threadpool.h
 	$(CC) $(FLAGS) -o example main.o
 
-test : test.o threadpool.o catch.hpp threadpool.h
+test : test.o catch.hpp threadpool.h
 	$(CC) $(FLAGS) -o test test.cpp
 
 main.o : main.cpp
