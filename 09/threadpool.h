@@ -32,14 +32,8 @@ public:
                         tasks.pop();
                         
                         lock.unlock();
-                        try
-                        {
-                            current_task();
-                        }
-                        catch(const std::exception& e)
-                        {
-                            std::cerr << e.what() << std::endl;
-                        }
+                        
+                        current_task();
                     }
                     else
                     {
