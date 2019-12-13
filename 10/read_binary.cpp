@@ -14,11 +14,9 @@ int main(int argc, const char *argv[])
 	}
 	std::ifstream file(argv[1], std::fstream::in | std::fstream::binary);
 
-	while (!file.eof())
+	uint64_t num;
+	while (file.read((char*)(&num),sizeof(uint64_t)))
 	{
-		uint64_t num;
-		file.read((char*)(&num),sizeof(uint64_t));
-        
 		std::cout<<num<<std::endl;
 	}
 
