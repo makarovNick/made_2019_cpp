@@ -59,30 +59,8 @@ void Sorter::process()
             }
         }
     }
-    while(true)
-    {
-        std::string tmp1, tmp2, merged;
-        {
-            std::unique_lock<std::mutex> lock(queue_mutex);
-            if(temp_parts.size() != 1)
-            {
-                tmp1 = temp_parts.front();
-                temp_parts.pop();
-                tmp2 = temp_parts.front();
-                temp_parts.pop();
-            }
-            else
-            {
-                break;
-            }
-            
-        }
-        merged = mergeFiles(tmp1, tmp2);
-        {
-            std::unique_lock<std::mutex> lock(queue_mutex);
-            temp_parts.emplace(merged);
-        }
-    }
+    
+    foldQueue();
 }
 
 void Sorter::addToQueue(const std::vector<uint64_t>& block)
@@ -173,14 +151,29 @@ void Sorter::writeBlock(const std::vector<uint64_t>& block, const std::string& f
 
 void Sorter::foldQueue()
 {
-    std::unique_lock<std::mutex> lock(queue_mutex);
-    while(temp_parts.size()!=1)
+    while(true)
     {
-        std::string a = temp_parts.front();
-        temp_parts.pop();
-        std::string b = temp_parts.front();
-        temp_parts.pop();
-        temp_parts.emplace(mergeFiles(a, b));
+        std::string tmp1, tmp2, merged;
+        {
+            std::unique_lock<std::mutex> lock(queue_mutex);
+            if(temp_parts.size() != 1)
+            {
+                tmp1 = temp_parts.front();
+                temp_parts.pop();
+                tmp2 = temp_parts.front();
+                temp_parts.pop();
+            }
+            else
+            {
+                break;
+            }
+            
+        }
+        merged = mergeFiles(tmp1, tmp2);
+        {
+            std::unique_lock<std::mutex> lock(queue_mutex);
+            temp_parts.emplace(merged);
+        }
     }
 }
 
