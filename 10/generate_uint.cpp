@@ -28,7 +28,7 @@ int main(int argc, const char *argv[])
 	{
 		uint64_t num = distribution(generator);
 		file.write((char*)(&num),sizeof(uint64_t));
-		std::cout<<num<<std::endl;
+		//std::cout<<num<<std::endl;
 	}
 
 	return 0;
