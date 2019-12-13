@@ -19,7 +19,7 @@ Sorter.o : limited_sorter.cpp
 	$(CC) -c limited_sorter.cpp 
 
 clean : 
-	rm -f *.o generate_uint64 input sort output* _temp_* read_binary *.out
+	rm -f *.o generate_uint64 input sort output* _temp_* read_binary *.out naive_sort
 
 read : read_binary.cpp
 	$(CC) -o read_binary read_binary.cpp

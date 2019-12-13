@@ -59,6 +59,30 @@ void Sorter::process()
             }
         }
     }
+    while(true)
+    {
+        std::string tmp1, tmp2, merged;
+        {
+            std::unique_lock<std::mutex> lock(queue_mutex);
+            if(temp_parts.size() != 1)
+            {
+                tmp1 = temp_parts.front();
+                temp_parts.pop();
+                tmp2 = temp_parts.front();
+                temp_parts.pop();
+            }
+            else
+            {
+                break;
+            }
+            
+        }
+        merged = mergeFiles(tmp1, tmp2);
+        {
+            std::unique_lock<std::mutex> lock(queue_mutex);
+            temp_parts.emplace(merged);
+        }
+    }
 }
 
 void Sorter::addToQueue(const std::vector<uint64_t>& block)
@@ -71,14 +95,8 @@ void Sorter::addToQueue(const std::vector<uint64_t>& block)
     std::string old_path = "";
     {
         std::unique_lock<std::mutex> lock(queue_mutex);
-        if(!temp_parts.empty())
-        {
-            old_path = temp_parts.front();
-            temp_parts.pop();
-        }
 
-
-        temp_parts.emplace(mergeFiles(new_path, old_path));
+        temp_parts.emplace(new_path);
     }
 }
 
@@ -169,13 +187,11 @@ void Sorter::foldQueue()
 std::vector<uint64_t> Sorter::readBlock()
 {
     std::vector<uint64_t> block;
-
-    if(!input.eof())
     {
         std::lock_guard<std::mutex> lock(input_mutex);
         size_t i = 0;
         uint64_t tmp = 0;
-        while((i < AVAILIBLE_MEMORY / (2 * sizeof(uint64_t))) && input.read((char*)(&tmp), sizeof(uint64_t)))
+        while((i++ < AVAILIBLE_MEMORY / (2 * sizeof(uint64_t))) && input.read((char*)(&tmp), sizeof(uint64_t)))
         {
             block.push_back(tmp);
         }
