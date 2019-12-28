@@ -6,12 +6,12 @@
 #include <vector>
 #include <thread>
 #include <mutex>
-#include  <algorithm>
+#include <algorithm>
 
 class Sorter
 {
 public:
-    Sorter(const std::string& inpu, const std::string& output, size_t mem = 1024 * 1024 * 8);
+    Sorter(const std::string& input, const std::string& output, size_t mem = 1024 * 1024 * 8);
 
     std::string Sort();
 
@@ -23,7 +23,7 @@ private:
 
     void writeBlock(const std::vector<uint64_t>& block, const std::string& file_name);
 
-    std::string mergeFiles(std::string& left_file, std::string& right_file);
+    std::string mergeFiles(const std::string& left_file, const std::string& right_file);
 
     std::vector<uint64_t> readBlock();
     std::vector<uint64_t> readBlock(const std::string& file);
