@@ -69,7 +69,7 @@ void Sorter::addToQueue(const std::vector<uint64_t>& block)
     }
 }
 
-std::string Sorter::mergeFiles(std::string& left_file, std::string& right_file)
+std::string Sorter::mergeFiles(const std::string& left_file, const std::string& right_file)
 {
     std::string new_path = "_temp_" + std::to_string(num_blocks) + ".bin";
     std::ifstream is_b(right_file, std::fstream::binary | std::fstream::out  | std::fstream::ate);
