@@ -8,8 +8,6 @@
 #include <mutex>
 #include  <algorithm>
 
-//#define pr(a) std::cout<<a<<std::endl
-
 class Sorter
 {
 public:
@@ -25,13 +23,13 @@ private:
 
     void writeBlock(const std::vector<uint64_t>& block, const std::string& file_name);
 
-    std::string mergeFiles(std::string& a, std::string& b);
+    std::string mergeFiles(std::string& left_file, std::string& right_file);
 
     std::vector<uint64_t> readBlock();
     std::vector<uint64_t> readBlock(const std::string& file);
     
     std::ifstream input;
-    std::ofstream output;
+    std::string output;
 
     //needed to various temp files ( in case of rewritting)
     std::atomic<int> num_blocks;

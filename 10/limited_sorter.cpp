@@ -17,23 +17,14 @@ std::string Sorter::Sort()
     auto tmp = temp_parts.front();
     temp_parts.pop();
 
-    //easy copy
-    std::ifstream source(tmp, std::ios::binary  | std::fstream::out | std::fstream::ate);
-    source.seekg(0);
-
-    std::istreambuf_iterator<char> begin_source(source);
-    std::istreambuf_iterator<char> end_source;
-    std::ostreambuf_iterator<char> begin_dest(output); 
-    std::copy(begin_source, end_source, begin_dest);
-
-    std::remove(tmp.c_str());
+    std::rename(tmp.c_str(), output.c_str());
 
     return tmp;      
 }
 
 Sorter::Sorter(const std::string& inpu, const std::string& output, size_t mem)
     : input(inpu, std::fstream::binary  | std::fstream::out | std::fstream::ate)
-    , output(output, std::fstream::binary | std::fstream::out | std::fstream::ate)
+    , output(output)
     , AVAILIBLE_MEMORY(mem)
     , num_blocks{0}
     , input_lenght(input.tellg() / sizeof(uint64_t))
@@ -59,7 +50,7 @@ void Sorter::process()
             }
         }
     }
-    
+
     foldQueue();
 }
 
@@ -78,26 +69,29 @@ void Sorter::addToQueue(const std::vector<uint64_t>& block)
     }
 }
 
-std::string Sorter::mergeFiles(std::string& a, std::string& b)
+std::string Sorter::mergeFiles(std::string& left_file, std::string& right_file)
 {
-    std::string new_path = "_temp_" + std::to_string(int(num_blocks.load())) + ".bin";
+    std::string new_path = "_temp_" + std::to_string(num_blocks) + ".bin";
+    std::ifstream is_b(right_file, std::fstream::binary | std::fstream::out  | std::fstream::ate);
+    std::ifstream is_a(left_file, std::fstream::binary | std::fstream::out  | std::fstream::ate);
 
-    if(a == "")
+    if(left_file == "")
     {
-        std::remove(a.c_str());
-        return b;
+        if(is_a.good())
+            std::remove(left_file.c_str());
+        return right_file;
     }
 
-    if(b == "")
+    if(right_file == "")
     {
-        std::remove(b.c_str());
-        return a;
+        if(is_b.good())
+            std::remove(right_file.c_str());
+        return left_file;
     }
     num_blocks ++;
 
-    std::ifstream is_a(a, std::fstream::binary | std::fstream::out  | std::fstream::ate);
     is_a.seekg(0);
-    std::ifstream is_b(b, std::fstream::binary | std::fstream::out  | std::fstream::ate);
+   
     is_b.seekg(0);
     std::ofstream os_new(new_path, std::fstream::binary | std::fstream::out);
 
@@ -134,8 +128,8 @@ std::string Sorter::mergeFiles(std::string& a, std::string& b)
         }
     }
 
-    std::remove(a.c_str());
-    std::remove(b.c_str());
+    std::remove(left_file.c_str());
+    std::remove(right_file.c_str());
 
     return new_path;
 }
@@ -181,7 +175,7 @@ std::vector<uint64_t> Sorter::readBlock()
 {
     std::vector<uint64_t> block;
     {
-        std::lock_guard<std::mutex> lock(input_mutex);
+        std::unique_lock<std::mutex> lock(input_mutex);
         size_t i = 0;
         uint64_t tmp = 0;
         while((i++ < AVAILIBLE_MEMORY / (2 * sizeof(uint64_t))) && input.read((char*)(&tmp), sizeof(uint64_t)))
