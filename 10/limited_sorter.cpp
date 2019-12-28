@@ -43,7 +43,7 @@ void Sorter::process()
         addToQueue(current_block);
 
         {
-            std::unique_lock<std::mutex> lock(queue_mutex);    
+            std::unique_lock<std::mutex> lock(input_mutex);    
             if(input.eof())
             {
                 break;
